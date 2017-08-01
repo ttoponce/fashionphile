@@ -43,9 +43,7 @@
        JOIN jobs j ON a.job_id = j.id
        WHERE j.id = 1";
     $result_developer = $conn->query($getinfo_applicant_webdeveloper);
-    //$application_webdeveloper_arr = $result_developer->fetch_assoc();
-
-    $application_webdeveloper_arr = array_filter($application_webdeveloper_arr);
+    $application_webdeveloper_arr = $result_developer->fetch_assoc();
 
     $getinfo_applicant_designer = 
       "SELECT j.id, a.name, a.email, a.website, a.cover_letter
@@ -53,9 +51,7 @@
        JOIN jobs j ON a.job_id = j.id
        WHERE j.id = 2";
     $result_designer = $conn->query($getinfo_applicant_designer);
-    //$application_designer_arr = $result_designer->fetch_assoc();
-
-    $application_designer_arr = array_filter($application_designer_arr);
+    $application_designer_arr = $result_designer->fetch_assoc();
 
     $skills_arr_rowcount_perapplicant = "SELECT COUNT(*) FROM skills s JOIN applicants a ON a.id = s.applicant_id WHERE s.applicant_id = a.id";
 
