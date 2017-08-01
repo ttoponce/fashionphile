@@ -24,25 +24,33 @@
 
   <?php
 
-    require 'TylerToponce_assessment_conn.php';
-
-    $mysqli = new mysqli("localhost", "localhost1", "localhost", "fashionphile");
+    $conn = new mysqli("localhost", "localhost1", "localhost", "fashionphile");
     
     if (mysqli_connect_errno()) {
-        printf("Connect failed: %s\n", mysqli_connect_error());
+        printf("Connection failed: %s\n", mysqli_connect_error());
         exit();
     }
 
-    $getinfo_jobname = "SELECT name FROM jobs WHERE id = '$jobId'";
-    $getinfo_applicantname = "SELECT name FROM applicants WHERE id = '$applicantId'";
-    $getinfo_applicantemail = "SELECT email FROM applicants WHERE id = '$applicantId'";
-    $getinfo_applicantwebsite = "SELECT website FROM applicants WHERE id = '$applicantId'";
-    $getinfo_coverletter = "SELECT cover_letter FROM applicants WHERE id = '$applicantId'";
-    $getinfo_skill = "SELECT name FROM skills WHERE id = '$applicantID'";
+    $getinfo_job = "SELECT name FROM jobs";
+    $job_result = $conn->query($getinfo_job);
+    $job_result_array = mysqli_fetch_array($job_result, MYSQLI_NUM);
 
-  ?>
+    $getinfo_applicant = 
+      "SELECT j.*, a.*, s.*
+       FROM jobs j
+       JOIN applicants a ON a.job_id = j.id
+       JOIN skills s ON s.applicant_id = a.id
+       WHERE s.applicant_id = a.id";
+    $result = $conn->query($getinfo_applicant);
 
-    <div id="page">
+    $skills_arr_rowcount_perapplicant = "SELECT COUNT(*) FROM skills s JOIN applicants a ON a.id = s.applicant_id WHERE s.applicant_id = a.id";
+
+    $skills_toprowname = "SELECT s.name FROM skills s JOIN applicants a ON a.id = s.applicant_id";
+    $skills_toprowname_result = $conn->query($skills_toprowname);
+    $skillslist_array = mysqli_fetch_array($skills_toprowname_result, MYSQLI_NUM);
+
+    if ($getinfo_applicant->num_rows > 0) {
+      echo '<div id="page">
       <table class="job-applicants">
         <thead>
           <tr>
@@ -56,14 +64,74 @@
         </thead>
 
         <tbody>
+        <tr>
+                <td rowspan="10" class="job-name">' . $job_result_array[0] . '</td>'
+
+      while ($application_arr = $result->fetch_assoc() && $job_result_array[0] == 'Web Developer') {
+        echo '<td rowspan="' . $skills_arr_rowcount_perapplicant . '" class="applicant-name">' . $application_arr["a.name"] . '</td><td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="mailto:kaitlin@lesch.co.uk">' . $application_arr["a.email"] . '</a></td><td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="http://berge.biz/">' . $application_arr["a.website"] . '</a></td><td>' . $skillslist_array[0] . '</td><td rowspan="' . $skills_arr_rowcount_perapplicant . '">' . $application_arr["a.cover_letter"] . '</td></tr>'
+
+                  if (count($skillslist_array) > 1) {
+                    for ($i = 1; $count = count($skillslist_array) - 1; $i <= $count; $i++) {
+                      echo '<tr>
+                              <td>' . $skillslist_array[i] . '</td>
+                            </tr>';
+                    }
+                  }
+
+              '</tr><tr>'
+      }
+
+      echo '<td rowspan="12" class="job-name">' . $job_result_array[1] . '</td>';
+
+      while ($application_arr = $result->fetch_assoc() && $job_result_array[1] == 'Designer') {
+        echo '<td rowspan="' . $skills_arr_rowcount_perapplicant . '" class="applicant-name">' . $application_arr["a.name"] . '</td><td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="mailto:kaitlin@lesch.co.uk">' . $application_arr["a.email"] . '</a></td><td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="http://berge.biz/">' . $application_arr["a.website"] . '</a></td><td>' . $skillslist_array[0] . '</td><td rowspan="' . $skills_arr_rowcount_perapplicant . '">' . $application_arr["a.cover_letter"] . '</td></tr>'
+
+                  if (count($skillslist_array) > 1) {
+                    for ($i = 1; $count = count($skillslist_array) - 1; $i <= $count; $i++) {
+                      echo '<tr>
+                              <td>' . $skillslist_array[i] . '</td>
+                            </tr>';
+                    }
+                  }
+
+              '</tr>'
+      }
+
+    }
+
+    // $getinfo_skills = 
+    //   "SELECT name 
+    //    FROM skills 
+    //    WHERE id IN (SELECT id FROM applicants)";
+    // $result_skills = $conn->query($getinfo_skills);
+    // $skills_arr = $result_skills->fetch_assoc();
+
+    $conn->close();
+
+  ?>
+
+    <!-- <div id="page">
+      <table class="job-applicants">
+        <thead>
+          <tr>
+            <th>Job</th>
+            <th>Applicant Name</th>
+            <th>Email Address</th>
+            <th>Website</th>
+            <th>Skills</th>
+            <th>Cover Letter Paragraph</th>
+          </tr>
+        </thead>
+
+        <tbody> -->
           <!-- Web Developer -->
           <tr>
-            <td rowspan="10" class="job-name" value="<?= $getinfo_jobname ?>"></td>
-            <td rowspan="3" class="applicant-name" value="<?= $getinfo_applicantname ?>"></td>
-            <td rowspan="3"><a href="mailto:kaitlin@lesch.co.uk">kaitlin@lesch.co.uk</a></td>
-            <td rowspan="3"><a href="http://berge.biz/">berge.biz</td>
+            <td rowspan="10" class="job-name" value="<?= $application_arr["j.name"] ?>"></td>
+            <td rowspan="3" class="applicant-name" value="<?= $application_arr["a.name"] ?>"></td>
+            <td rowspan="3"><a href="mailto:kaitlin@lesch.co.uk" value="<?= $application_arr["a.email"] ?>"></a></td>
+            <td rowspan="3"><a href="http://berge.biz/" value="<?= $application_arr["a.website"] ?>"></a></td>
             <td>Ruby</td>
-            <td rowspan="3">Deleniti debitis soluta magni ipsum perspiciatis in itaque eligendi. Modi quidem qui nisi autem vel. Iste non quia dolores quo excepturi corrupti et nobis.</td>
+            <td rowspan="3" value="<?= $application_arr["a.cover_letter "] ?>"></td>
           </tr>
           <tr>
             <td>PHP</td>
