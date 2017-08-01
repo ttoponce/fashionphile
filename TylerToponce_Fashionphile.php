@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Job Applicants Report | Tyler Toponce PHP Assessment</title>
+    <title>Job Applicants Report</title>
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.1/build/cssreset/cssreset-min.css">
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.1/build/cssbase/cssbase-min.css">
     <style type="text/css">
@@ -35,21 +35,27 @@
     $job_result = $conn->query($getinfo_job);
     $job_result_array = mysqli_fetch_array($job_result, MYSQLI_NUM);
 
+    $getinfo_applicant = "SELECT name FROM applicants";
+
     $getinfo_applicant_webdeveloper = 
       "SELECT j.id, a.name, a.email, a.website, a.cover_letter
        FROM applicants a
        JOIN jobs j ON a.job_id = j.id
        WHERE j.id = 1";
-    $result = $conn->query($getinfo_applicant_webdeveloper);
-    $application_webdeveloper_arr = $result->fetch_assoc();
+    $result_developer = $conn->query($getinfo_applicant_webdeveloper);
+    //$application_webdeveloper_arr = $result_developer->fetch_assoc();
+
+    $application_webdeveloper_arr = array_filter($application_webdeveloper_arr);
 
     $getinfo_applicant_designer = 
       "SELECT j.id, a.name, a.email, a.website, a.cover_letter
        FROM applicants a
        JOIN jobs j ON a.job_id = j.id
        WHERE j.id = 2";
-    $result = $conn->query($getinfo_applicant_designer);
-    $application_designer_arr = $result->fetch_assoc();
+    $result_designer = $conn->query($getinfo_applicant_designer);
+    //$application_designer_arr = $result_designer->fetch_assoc();
+
+    $application_designer_arr = array_filter($application_designer_arr);
 
     $skills_arr_rowcount_perapplicant = "SELECT COUNT(*) FROM skills s JOIN applicants a ON a.id = s.applicant_id WHERE s.applicant_id = a.id";
 
@@ -78,47 +84,50 @@
         <tbody>
             <!-- Web Developer -->
             <tr>
-              <td rowspan="10" class="job-name">Web Developer</td>'
+              <td rowspan="10" class="job-name">Web Developer</td>';
 
-      while ($application_webdeveloper_arr[]) {
+      for ($i = 0; $application_webdeveloper_arr[$i] = $result_developer->fetch_assoc(); $i++) {
         echo '<td rowspan="' . $skills_arr_rowcount_perapplicant . '" class="applicant-name">' . $application_webdeveloper_arr['name'] . '</td>
               <td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="mailto:kaitlin@lesch.co.uk">' . $application_webdeveloper_arr['email'] . '</a></td>
               <td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="http://berge.biz/">' . $application_arr['website'] . '</a></td>
               <td>' . $skillslist_array[0] . '</td>
               <td rowspan="' . $skills_arr_rowcount_perapplicant . '">' . $application_arr['cover_letter'] . '</td>
-            </tr>'
+            </tr>';
 
                   if (count($skillslist_array) > 1) {
-                    for ($i = 1; $count = count($skillslist_array) - 1; $i <= $count; $i++) {
-                      echo  . '<tr>
+                    $count = count($skillslist_array) - 1;
+                    for ($i = 1; $i <= $count; $i++) {
+                      echo  '<tr>
                               <td>' . $skillslist_array[i] . '</td>
-                            </tr>' . ;
+                            </tr>';
                     }
                   }
 
-              '<tr>'
+        echo '<tr>';
+        array_pop($application_webdeveloper_arr);
       }
       echo '<!-- /Web Developer --><!-- Designer -->
 
             <td rowspan="12" class="job-name">Designer</td>';
 
-      while ($application_designer_arr[]) {
+      for ($i = 0; $application_designer_arr[$i] = $result_designer->fetch_assoc(); $i++) {
         echo '<td rowspan="' . $skills_arr_rowcount_perapplicant . '" class="applicant-name">' . $application_designer_arr['name'] . '</td>
               <td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="mailto:kaitlin@lesch.co.uk">' . $application_designer_arr['email'] . '</a></td>
               <td rowspan="' . $skills_arr_rowcount_perapplicant . '"><a href="http://berge.biz/">' . $application_designer_arr['website'] . '</a></td>
               <td>' . $skillslist_array[0] . '</td>
               <td rowspan="' . $skills_arr_rowcount_perapplicant . '">' . $application_designer_arr['cover_letter'] . '</td>
-            </tr>'
+            </tr>';
 
                   if (count($skillslist_array) > 1) {
-                    for ($i = 1; $count = count($skillslist_array) - 1; $i <= $count; $i++) {
-                      echo  . '<tr>
+                    $count = count($skillslist_array) - 1;
+                    for ($i = 1; $i <= $count; $i++) {
+                      echo '<tr>
                               <td>' . $skillslist_array[i] . '</td>
-                            </tr>' . ;
+                            </tr>';
                     }
                   }
 
-              '<tr>'
+        echo '<tr>';
       }
 
       echo '<!-- /Designer -->
