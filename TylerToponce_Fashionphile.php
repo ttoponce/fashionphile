@@ -57,6 +57,10 @@
     $skills_toprowname_result = $conn->query($skills_toprowname);
     $skillslist_array = mysqli_fetch_array($skills_toprowname_result, MYSQLI_NUM);
 
+    $skills_distinct_count = "SELECT COUNT(DISTINCT name) FROM skills";
+
+    $applicants_distinct_count = "SELECT COUNT(DISTINCT name) FROM applicants";
+
     if ($getinfo_applicant->num_rows > 0) {
       echo '<div id="page">
       <table class="job-applicants">
@@ -72,6 +76,7 @@
         </thead>
 
         <tbody>
+            <!-- Web Developer -->
             <tr>
               <td rowspan="10" class="job-name">Web Developer</td>'
 
@@ -93,8 +98,9 @@
 
               '<tr>'
       }
+      echo '<!-- /Web Developer --><!-- Designer -->
 
-      echo '<td rowspan="12" class="job-name">Designer</td>';
+            <td rowspan="12" class="job-name">Designer</td>';
 
       while ($application_designer_arr[]) {
         echo '<td rowspan="' . $skills_arr_rowcount_perapplicant . '" class="applicant-name">' . $application_designer_arr['name'] . '</td>
@@ -115,140 +121,20 @@
               '<tr>'
       }
 
+      echo '<!-- /Designer -->
+            </tbody>
+            <tfooter>
+              <tr>
+                <td colspan="6">' . $applicants_distinct_count . 'Applicants, ' . $skills_distinct_count . 'Unique Skills</td>
+              </tr>
+            </tfooter>
+          </table>
+        </div>';
+
     }
 
     $conn->close();
 
   ?>
-
-    <!-- <div id="page">
-      <table class="job-applicants">
-        <thead>
-          <tr>
-            <th>Job</th>
-            <th>Applicant Name</th>
-            <th>Email Address</th>
-            <th>Website</th>
-            <th>Skills</th>
-            <th>Cover Letter Paragraph</th>
-          </tr>
-        </thead>
-
-        <tbody> -->
-          <!-- Web Developer -->
-          <tr>
-            <td rowspan="10" class="job-name" value="<?= $application_arr["j.name"] ?>"></td>
-            <td rowspan="3" class="applicant-name" value="<?= $application_arr["a.name"] ?>"></td>
-            <td rowspan="3"><a href="mailto:kaitlin@lesch.co.uk" value="<?= $application_arr["a.email"] ?>"></a></td>
-            <td rowspan="3"><a href="http://berge.biz/" value="<?= $application_arr["a.website"] ?>"></a></td>
-            <td>Ruby</td>
-            <td rowspan="3" value="<?= $application_arr["a.cover_letter "] ?>"></td>
-          </tr>
-          <tr>
-            <td>PHP</td>
-          </tr>
-          <tr>
-            <td>Javascript</td>
-          </tr>
-          <tr>
-            <td rowspan="2" class="applicant-name">Camila Walsh</td>
-            <td rowspan="2"><a href="mailto:berneice@turner.biz">berneice@turner.biz</a></td>
-            <td rowspan="2">---</td>
-            <td>PHP</td>
-            <td rowspan="2">Et rerum nihil saepe excepturi cumque. Pariatur illo nihil inventore est ipsam. Quam voluptate aperiam sunt et nihil exercitationem dolore. Vitae dolor et accusamus vero et velit eligendi qui. Ut qui aliquam dolor.</td>
-          </tr>
-          <tr>
-            <td>Java</td>
-          </tr>
-          <tr>
-            <td rowspan="2" class="applicant-name">Simeon Connelly</td>
-            <td rowspan="2"><a href="mailto:vicenta.swift@stantonmiller.info">vicenta.swift@stantonmiller.info</a></td>
-            <td rowspan="2"><a href="http://monahanwehner.us/">monahanwehner.us</td>
-            <td>Python</td>
-            <td rowspan="2">Voluptatem dolor explicabo quos omnis eum velit optio est. Voluptatum exercitationem placeat ea molestiae esse eum saepe earum. Unde deleniti mollitia molestiae maiores laborum corrupti cupiditate. Perspiciatis alias amet porro beatae omnis voluptatum officia quia. Quaerat quasi et suscipit.</td>
-          </tr>
-          <tr>
-            <td>C</td>
-          </tr>
-          <tr>
-            <td rowspan="3" class="applicant-name">Vernice Watsicay</td>
-            <td rowspan="3"><a href="mailto:jaylon@hoeger.biz">jaylon@hoeger.biz</a></td>
-            <td rowspan="3"><a href="http://hegmann.biz/">hegmann.biz</td>
-            <td>C++</td>
-            <td rowspan="3">Quidem impedit et voluptatem. Cum nisi rem ut autem in qui veritatis alias. Harum mollitia et delectus nihil facilis. Cumque asperiores eum culpa sed. Minima sapiente molestiae atque dolorem et.</td>
-          </tr>
-          <tr>
-            <td>Java</td>
-          </tr>
-          <tr>
-            <td>Lisp</td>
-          </tr>
-          <!-- /Web Developer -->
-
-          <!-- Designer -->
-          <tr>
-            <td rowspan="12" class="job-name">Designer</td>
-            <td rowspan="3" class="applicant-name">Demetrius O'Reilly</td>
-            <td rowspan="3"><a href="mailto:johan@hayes.biz">johan@hayes.biz</a></td>
-            <td rowspan="3"><a href="http://hayes.ca/">hayes.ca</td>
-            <td>Fireworks</td>
-            <td rowspan="3">Dignissimos debitis iste optio minus. Illum molestiae eius nam mollitia iure voluptatem eaque quis. Omnis deserunt aut tempora. Soluta ab ullam dignissimos quia. Ea ducimus earum quae voluptate.</td>
-          </tr>
-          <tr>
-            <td>Illustrator</td>
-          </tr>
-          <tr>
-            <td>Photoshop</td>
-          </tr>
-          <tr>
-            <td rowspan="3" class="applicant-name">Miss Bonnie Kihn</td>
-            <td rowspan="3"><a href="mailto:korbin@balistrerigleason.uk">korbin@balistrerigleason.uk</a></td>
-            <td rowspan="3"><a href="http://block.com/">block.com</td>
-            <td>Photoshop</td>
-            <td rowspan="3">Illo sequi minus veritatis similique. Enim voluptas dicta velit quo. Sapiente architecto a nihil qui fuga. Voluptas cupiditate eos rerum et.</td>
-          </tr>
-          <tr>
-            <td>Fireworks</td>
-          </tr>
-          <tr>
-            <td>Illustrator</td>
-          </tr>
-          <tr>
-            <td rowspan="3" class="applicant-name">Mrs. Alexis Lebsack</td>
-            <td rowspan="3"><a href="mailto:guadalupe.glover@crona.info">guadalupe.glover@crona.info</a></td>
-            <td rowspan="3"><a href="http://gusikowskibogisich.us/">gusikowskibogisich.us</td>
-            <td>Photoshop</td>
-            <td rowspan="3">Molestiae culpa eum vel deleniti quia laboriosam sed. Necessitatibus quo ut eos dignissimos sint et dolores. Vitae non nihil beatae reiciendis. Itaque quis quibusdam a deleniti iusto ullam quo perferendis.</td>
-          </tr>
-          <tr>
-            <td>Fireworks</td>
-          </tr>
-          <tr>
-            <td>Illustrator</td>
-          </tr>
-          <tr>
-            <td rowspan="3" class="applicant-name">Micah Orn</td>
-            <td rowspan="3"><a href="mailto:hunter.hudson@yundt.uk">hunter.hudson@yundt.uk</a></td>
-            <td rowspan="3"><a href="http://kihnmosciski.uk/">kihnmosciski.uk</td>
-            <td>Photoshop</td>
-            <td rowspan="3">Maxime a est iure id fugiat dolorem aut non. Est qui sit id facere. Quam nemo non aut. Explicabo accusantium iusto optio doloremque quidem sed. Praesentium perferendis aliquam impedit quod.</td>
-          </tr>
-          <tr>
-            <td>Fireworks</td>
-          </tr>
-          <tr>
-            <td>Illustrator</td>
-          </tr>
-          <!-- /Designer -->
-
-        </tbody>
-
-        <tfooter>
-          <tr>
-            <td colspan="6">8 Applicants, 11 Unique Skills</td>
-          </tr>
-        </tfooter>
-      </table>
-    </div>
   </body>
 </html>
