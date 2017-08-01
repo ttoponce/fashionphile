@@ -31,11 +31,9 @@
         exit();
     }
 
-    $getinfo_job = "SELECT name FROM jobs";
-    $job_result = $conn->query($getinfo_job);
-    $job_result_array = mysqli_fetch_array($job_result, MYSQLI_NUM);
-
     $getinfo_applicant = "SELECT name FROM applicants";
+    $result = $conn->query($getinfo_applicant);
+    $applicant_arr = $result->fetch_assoc();
 
     $getinfo_applicant_webdeveloper = 
       "SELECT j.id, a.name, a.email, a.website, a.cover_letter
@@ -63,7 +61,7 @@
 
     $applicants_distinct_count = "SELECT COUNT(DISTINCT name) FROM applicants";
 
-    if ($getinfo_applicant->num_rows > 0) {
+    if ($applicant_arr->num_rows > 0) {
       echo '<div id="page">
       <table class="job-applicants">
         <thead>
